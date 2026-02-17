@@ -1,26 +1,28 @@
-# Imagem base
-FROM node:20-alpine
+# ---------- BUILD STAGE ----------
+FROM node:20-alpine AS builder
 
-# Diretório de trabalho
 WORKDIR /app
 
-# Copia package.json primeiro
 COPY package*.json ./
-
-# Instala dependências
 RUN npm install
 
-# Copia resto da aplicação
 COPY . .
 
-# Gera o Prisma Client
 RUN npx prisma generate
-
-# Build da aplicação
 RUN npm run build
 
-# Porta que o Nest usa
+# ---------- PRODUCTION STAGE ----------
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --omit=dev
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
 EXPOSE 3000
 
-# Comando para rodar
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
