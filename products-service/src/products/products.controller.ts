@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, InternalServerErrorException } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create.product.dto';
 import { UpdateProductDto } from './dto/update.product.dto';
@@ -8,28 +8,56 @@ export class ProductsController {
     constructor(private readonly productService:ProductsService){}
 
     @Post()
-    create(@Body() data:CreateProductDto){
-        return this.productService.create(data);
+    async create(@Body() data:CreateProductDto){
+        try {
+            return await this.productService.create(data);
+        } catch (error) {
+            throw new InternalServerErrorException('Failed to create product');
+        }
     }
 
 
     @Get()
-    findAll(){
-        return this.productService.findAll();
+    async findAll(){
+        return await this.productService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id') id:string){
-        return this.productService.findOne(id);
+     async findOne(@Param('id') id:string){
+        try { 
+            const product = await this.productService.findOne(id);
+            if(!product){
+                throw new Error('Product not found');
+            }
+            return product;
+        } catch (error) {
+            throw new BadRequestException('Failed to find product');
+        }
     }
 
     @Patch(':id')
-    update(@Param('id') id:string, @Body() data:UpdateProductDto){
-        return this.productService.update(id, data);
+    async update(@Param('id') id:string, @Body() data:UpdateProductDto){
+        try {
+            const product = await this.productService.update(id, data);
+            if(!product){
+                throw new BadRequestException('Product not found');
+            }
+            return product;
+        } catch (error) {
+            throw new InternalServerErrorException('Failed to update product');
+        }
     }
 
     @Delete(':id')
-    delete(@Param('id') id:string){
-        return this.productService.delete(id);
+    async delete(@Param('id') id:string){
+        try {
+            const product = await this.productService.delete(id);
+            if(!product){
+                throw new BadRequestException('Product not found');
+            }
+            return product;
+        } catch (error) {
+            throw new InternalServerErrorException('Failed to delete product');
+        }
     }
 }

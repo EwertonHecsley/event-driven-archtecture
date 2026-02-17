@@ -1,0 +1,28 @@
+@baseUrl = http://localhost:3000
+
+### Get all products
+GET {{baseUrl}}/products
+
+### Get a product by ID
+GET {{baseUrl}}/products/c6e24090-e188-43c4-af21-fe7f739fcfe8
+
+### Create a new product
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Third Product",
+  "price": 19.99
+}
+
+### Update a product by ID
+PATCH {{baseUrl}}/products/f6101e9b-f2fa-443e-9703-bf3b97a63975
+Content-Type: application/json
+
+{
+  "name": "Terceiro Product",
+  "price": 29.99
+}
+
+### Delete a product by ID
+DELETE {{baseUrl}}/products/99be509a-0ab7-4302-aff2-ba63dfb61afc
