@@ -1,8 +1,9 @@
+
 services:
   products-db:
     image: postgres:15
     container_name: products-db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: products_user
       POSTGRES_PASSWORD: products_pass
@@ -11,6 +12,23 @@ services:
       - "5432:5432"
     volumes:
       - products_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U products_user -d products_db -h localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  products-service:
+    build: ./products-service
+    container_name: products-service
+    restart: unless-stopped
+    depends_on:
+      products-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://products_user:products_pass@products-db:5432/products_db
+    ports:
+      - "3000:3000"
 
 volumes:
   products_data:
