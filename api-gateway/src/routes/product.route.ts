@@ -10,7 +10,7 @@ export function registerProductRoutes(
   const target = configService.get<string>('services.products');
 
   app.use(
-    '/products',
-    proxyService.createProxy(target!, '/products'),
+    `/api/v1`,
+    proxyService.createProxy(target!),
   );
 }
