@@ -1,22 +1,22 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:3000/api/v1
 
 ### Get all products
 GET {{baseUrl}}/products
 
 ### Get a product by ID
-GET {{baseUrl}}/products/c6e24090-e188-43c4-af21-fe7f739fcfe8
+GET {{baseUrl}}/products/b52fe308-997c-41d4-8096-099f2d1f2870
 
 ### Create a new product
 POST {{baseUrl}}/products
 Content-Type: application/json
 
 {
-  "name": "Third Product",
-  "price": 19.99
+  "name": "Secundary Product",
+  "price": 29.99
 }
 
 ### Update a product by ID
-PATCH {{baseUrl}}/products/f6101e9b-f2fa-443e-9703-bf3b97a63975
+PATCH {{baseUrl}}/products/b52fe308-997c-41d4-8096-099f2d1f2870
 Content-Type: application/json
 
 {
@@ -25,4 +25,4 @@ Content-Type: application/json
 }
 
 ### Delete a product by ID
-DELETE {{baseUrl}}/products/99be509a-0ab7-4302-aff2-ba63dfb61afc
+DELETE {{baseUrl}}/products/b52fe308-997c-41d4-8096-099f2d1f2870
