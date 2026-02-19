@@ -15,9 +15,11 @@ export function registerRoutes(
 
     const upstreamBasePath = `/${serviceName}`;
 
+    const externalPath = `${API_PREFIX}/${serviceName}`;
+
     app.use(
-      `${API_PREFIX}/${serviceName}`,
-      proxyService.createProxy(target, upstreamBasePath),
+      externalPath,
+      proxyService.createBreakerProxy(serviceName, target, upstreamBasePath),
     );
 
     Logger.log(

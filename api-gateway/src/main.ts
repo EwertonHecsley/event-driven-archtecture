@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ProxyService } from './proxy/proxy.service';
 import { ConfigService } from '@nestjs/config';
-import { registerRoutes } from './routes/product.route';
+import { registerRoutes } from './routes/register.route';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
