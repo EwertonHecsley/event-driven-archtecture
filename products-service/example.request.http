@@ -4,7 +4,7 @@
 GET {{baseUrl}}/products
 
 ### Get a product by ID
-GET {{baseUrl}}/products/b52fe308-997c-41d4-8096-099f2d1f2870
+GET {{baseUrl}}/products/83d87571-c020-4a20-a699-68411587cc14
 
 ### Create a new product
 POST {{baseUrl}}/products
