@@ -35,6 +35,9 @@ services:
       - products-service
     environment:
       PRODUCTS_SERVICE_URL: http://products-service:3000
+      INTERNAL_API_KEY: my-secret-api-key
+      PORT: 3000
+      NODE_ENV: production
     ports:
       - "3000:3000"
 
