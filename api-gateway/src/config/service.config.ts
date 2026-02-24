@@ -4,5 +4,6 @@ export default () => ({
   internalApiKey: process.env.INTERNAL_API_KEY,
   services: {
     products: process.env.PRODUCTS_SERVICE_URL,
+    orders: process.env.ORDERS_SERVICE_URL,
   },
 });

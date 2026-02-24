@@ -1,4 +1,5 @@
 services:
+  # -------------------- PRODUCTS --------------------
   products-db:
     image: postgres:15
     container_name: products-db
@@ -8,7 +9,7 @@ services:
       POSTGRES_PASSWORD: products_pass
       POSTGRES_DB: products_db
     ports:
-      - "5432:5432"
+      - "5432:5432" # se não precisar acessar do host, pode remover
     volumes:
       - products_data:/var/lib/postgresql/data
     healthcheck:
@@ -27,14 +28,46 @@ services:
     environment:
       DATABASE_URL: postgresql://products_user:products_pass@products-db:5432/products_db
 
+  # -------------------- ORDERS --------------------
+  orders-db:
+    image: postgres:15
+    container_name: orders-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: orders_user
+      POSTGRES_PASSWORD: orders_pass
+      POSTGRES_DB: orders_db
+    ports:
+      - "5433:5432" #(usei 5433 pra não conflitar com products)
+    volumes:
+      - orders_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orders_user -d orders_db -h localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  orders-service:
+    build: ./orders-service
+    container_name: orders-service
+    restart: unless-stopped
+    depends_on:
+      orders-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://orders_user:orders_pass@orders-db:5432/orders_db
+
+  # -------------------- API GATEWAY --------------------
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway
     restart: unless-stopped
     depends_on:
       - products-service
+      - orders-service
     environment:
       PRODUCTS_SERVICE_URL: http://products-service:3000
+      ORDERS_SERVICE_URL: http://orders-service:3000
       INTERNAL_API_KEY: my-secret-api-key
       PORT: 3000
       NODE_ENV: production
@@ -43,3 +76,4 @@ services:
 
 volumes:
   products_data:
+  orders_data:

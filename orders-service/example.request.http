@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### Get all orders
+GET {{baseUrl}}/orders
+
+### Post Order Unique
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  
+}
+
+### Post Multiples Orders
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "83d87571-c020-4a20-a699-68411587cc14",
+      "quantity": 1,
+      "price": 19.9
+    },
+    {
+      "productId": "83d87571-c020-4a20-a699-68411587cc14",
+      "quantity": 2,
+      "price": 29.9
+    }
+  ]
+}
+
+### Find Order by ID
+GET {{baseUrl}}/orders/83d87571-c020-4a20-a699-68411587cc14
